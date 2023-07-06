@@ -1,0 +1,37 @@
+import random
+import json
+import paho.mqtt.publish as publish
+import time
+
+broker = "mqtt.beia-telemetrie.ro"
+port = 1883
+topic = "training/device/Visanescu-Geanina" 
+
+def generate_temperature():
+    # Generarea unei valori aleatoare pentru temperatură între -10 și 40 grade Celsius
+    temperature = round(random.uniform(-10, 40), 2)
+    return temperature
+
+def generate_humidity():
+    # Generarea unei valori aleatoare pentru umiditate între 0 și 100%
+    humidity = round(random.uniform(0, 100), 2)
+    return humidity
+
+while True:
+    # Generarea valorilor pentru temperatură și umiditate
+    temperature = generate_temperature()
+    humidity = generate_humidity()
+
+    # Afisarea valorilor generate
+    print("Temperatura:", temperature, "°C")
+    print("Umiditatea:", humidity, "%")
+
+    payload_dict = {
+        "temperature" : temperature
+    }
+
+    # Publicarea numărului random în topic
+    publish.single(topic, hostname=broker, port=port, payload=json.dumps(payload_dict))
+
+    # Așteptare pentru o perioadă de timp
+    time.sleep(10)
